@@ -1,0 +1,145 @@
+{
+  "swagger": "2.0",
+  "host": "loopback3-server-master.herokuapp.com",
+  "basePath": "/api/",
+  "securityHeaders": {},
+  "paths": {
+    "vehicles": {
+      "get": {
+        "summary": "Get all vehicles",
+        "operationId": "get.all.vehicles",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Vehicle" }
+            }
+          }
+        }
+      }
+    },
+    "vehicles/{id}": {
+      "get": {
+        "summary": "Get a vehicle by ID",
+        "operationId": "getVehicleById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of vehicle to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": { "200": { "description": "successful operation", "schema": { "$ref": "#/definitions/Vehicle" } } }
+      }
+    },
+    
+    "drivers": {
+      "get": {
+        "summary": "Get all drivers",
+        "operationId": "getAllDrivers",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Driver" }
+            }
+          }
+        }
+      }
+    },
+    "drivers/{id}": {
+      "get": {
+        "summary": "Get a driver by ID",
+        "operationId": "getDriverById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of driver to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": { "200": { "description": "successful operation", "schema": { "$ref": "#/definitions/Driver" } } }
+      }
+    },
+    
+    
+    "logs": {
+      "get": {
+        "summary": "Get all logs",
+        "operationId": "getLogbook",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Log"
+              }
+            }
+          }
+        }
+      }
+    },
+    "logs/{id}": {
+      "get": {
+        "summary": "Get log by id",
+        "operationId": "getLogById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of log to return",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "$ref": "#/definitions/Log" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Vehicle": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "associatedDrivers": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Driver" }
+        }
+      }
+    },
+
+    "Driver": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "associatedVehicles": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Vehicle" }
+        }
+      }
+    },
+
+    "Log": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "text": { "type": "string" }
+      }
+    }
+  }
+}

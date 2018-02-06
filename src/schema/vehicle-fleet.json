@@ -1,0 +1,231 @@
+{
+  "swagger": "2.0",
+  "host": "localhost:4000",
+  "basePath": "/api/",
+  "paths": {
+    "vehicle": {
+      "get": {
+        "summary": "Get all vehicles",
+        "operationId": "get.all.vehicles",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Vehicle" }
+            }
+          }
+        }
+      }
+    },
+    "vehicle/{id}": {
+      "get": {
+        "summary": "Get a vehicle by ID",
+        "operationId": "getVehicleById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of vehicle to return",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": { "200": { "description": "successful operation", "schema": { "$ref": "#/definitions/Vehicle" } } }
+      }
+    },
+    "vehicle/{id}/associatedDrivers": {
+      "get": {
+        "summary": "Get a associated drivers for a vehicle with ID",
+        "operationId": "getDriversForVehicleWithId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of vehicle",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "type": "array", "items": { "$ref": "#/definitions/Driver" } }
+          }
+        }
+      }
+    },
+    "driver": {
+      "get": {
+        "summary": "Get all drivers",
+        "operationId": "getAllDrivers",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": { "$ref": "#/definitions/Driver" }
+            }
+          }
+        }
+      }
+    },
+    "driver/{id}": {
+      "get": {
+        "summary": "Get a driver by ID",
+        "operationId": "getDriverById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of driver to return",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": { "200": { "description": "successful operation", "schema": { "$ref": "#/definitions/Driver" } } }
+      }
+    },
+    "driver/{id}/associatedVehicles": {
+      "get": {
+        "summary": "Get a associated vehicles for a driver with ID",
+        "operationId": "getVehiclesForDriverWithId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of driver",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "type": "array", "items": { "$ref": "#/definitions/Vehicle" } }
+          }
+        }
+      }
+    },
+    "driver/{id}/logBook": {
+      "get": {
+        "summary": "Get log book for a driver with ID",
+        "operationId": "getLogbookForDriverWithId",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of driver",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TripOrRefuel"
+              }
+            }
+          }
+        }
+      }
+    },
+    "logbook": {
+      "get": {
+        "summary": "Get all logs",
+        "operationId": "getLogbook",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/TripOrRefuel"
+              }
+            }
+          }
+        }
+      }
+    },
+    "logbook/{id}": {
+      "get": {
+        "summary": "Get log by id",
+        "operationId": "getLogById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of log to return",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": { "$ref": "#/definitions/TripOrRefuel" }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Vehicle": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "name": { "type": "string" },
+        "vehicleType": { "type": "string" },
+        "associatedDrivers": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Driver" }
+        }
+      }
+    },
+
+    "Driver": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "integer" },
+        "firstName": { "type": "string" },
+        "lastName": { "type": "string" },
+        "associatedVehicles": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/Vehicle" }
+        },
+        "logBook": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/TripOrRefuel" }
+        }
+      }
+    },
+
+    "Trip": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": [ "Trip" ] },
+        "id": { "type": "integer" },
+        "entryType": { "type": "string" },
+        "startDate": { "type": "string", "format": "date-time" },
+        "endDate": { "type": "string", "format": "date-time" },
+        "length": { "type": "integer" }
+      }
+    },
+    "Refuel": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "enum": [ "Refuel" ] },
+        "id": { "type": "integer" },
+        "entryType": { "type": "string" },
+        "startDate": { "type": "string", "format": "date-time" },
+        "endDate": { "type": "string", "format": "date-time" }
+      }
+    },
+    "TripOrRefuel": {
+      "anyOf": [ { "$ref": "#/definitions/Trip" }, { "$ref": "#/definitions/Refuel" } ]
+    }
+  }
+}
