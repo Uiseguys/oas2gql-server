@@ -1,3 +1,5 @@
+This is an Open API to graphql converter
+
 ## Relay spec - what needs to be implemented 
 
 * cursor based pagination
