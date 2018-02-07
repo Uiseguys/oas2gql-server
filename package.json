@@ -9,7 +9,7 @@
     "postinstall": "npm run build",
     "http-server": "node build/index.js"
   },
-  "author": "",
+  "author": "@dcroitoru",
   "license": "ISC",
   "dependencies": {
     "ajv": "^5.2.2",

@@ -37,9 +37,6 @@ app
   .listen(PORT, () => {
     console.log('\n')
     console.log(`Running a GraphQL API server at localhost:${PORT}/graphql`)
-    console.log(`Running a REST API server at localhost:${PORT}/api`)
-    console.log(`Test status at localhost:${PORT}/api/status`)
-    console.log(`Check schema at localhost:${PORT}/schema`)
   })
   .on('error', (err) =>
     console.error(`\n\nCould not start server, port ${PORT} already in use?\n`, 'Error message:', err.message)
