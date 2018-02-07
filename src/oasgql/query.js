@@ -1,13 +1,12 @@
 import { GraphQLList, GraphQLString, GraphQLInt, GraphQLInputObjectType } from 'graphql'
 import camelcase from 'camelcase'
-import rp from 'request-promise'
 import fetch from 'node-fetch'
 import DataLoader from 'dataloader'
 
 import { types, typeAlias, typeAliasCustom, wrapNonNull, getTypeFromSchema } from './type'
-import { logOperation, logResult } from './util'
 import uri from './uri'
 
+const log = require('debug')('query')
 let mapping = {}
 let loaders = {}
 
@@ -69,19 +68,20 @@ export const createWhereArgsForType = (type, def) => {
 }
 
 export const createFetchFunction = (verb, pathKey, parameters, afp) => {
-  const token = require('./token').default.access_token
   const { protocol, host, basePath, securityHeaders } = uri
   const baseURL = `${protocol}://${host}${basePath}`
   const fetchFunction = ({ operationPath, authHeaders, authSuffix = '' }) => {
     const url = `${baseURL}${operationPath}${authSuffix}`
 
-    console.log('=== fetch url', url)
-    console.log('auth headers', authHeaders)
+    // console.log('=== fetch url', url)
+    // console.log('auth headers', authHeaders)
+
+    log('fetch url', url)
 
     return fetch(url, {
       headers: authHeaders
     }).then((res) => {
-      console.log(res.statusText)
+      log('res.statusText', res.statusText)
       if (res.ok) {
         return res.json()
       } else {
@@ -90,9 +90,16 @@ export const createFetchFunction = (verb, pathKey, parameters, afp) => {
             .json()
             .then((error) => {
               // response body is a valid json and probably contains an error message
-              reject(new Error(error.message || 'unknown error'))
+              let message = 'Unknown error'
+              try {
+                message = error.error.message
+                log('error.message', message)
+              } catch (e) {}
+
+              reject(new Error(message))
             })
             .catch(() => {
+              log('res.statusText', res.statusText)
               // response body is NOT a valid json and we should extract error message from response status
               reject(new Error(`(` + res.status + ') ' + res.statusText || 'unknown error'))
             })
@@ -128,14 +135,14 @@ export const createResolveFunction = (verb, pathKey, parameters, afp, fetchFunct
     return loaders[pathKey]
       .load({ operationPath, authHeaders })
       .then((res, rej) => {
-        console.log('context loaders final result', res, rej)
+        log('context loaders final result', res, rej)
 
         let finalResult = res
         if (args.where) finalResult = applyWhereArgsToResponse(finalResult, args.where, afp.where)
         return Object.assign(finalResult, { parentArgs: args })
       })
       .catch((error) => {
-        console.log('context loaders, error in resolving', error)
+        log('context loaders, error in resolving', error)
         throw new Error(error)
       })
   }

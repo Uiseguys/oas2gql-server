@@ -1,6 +1,6 @@
 {
   "swagger": "2.0",
-  "host": "loopback3-server-master.herokuapp.com",
+  "host": "uiseguys-loopback3-server.herokuapp.com",
   "basePath": "/api/",
   "securityHeaders": {},
   "paths": {
